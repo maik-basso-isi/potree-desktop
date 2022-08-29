@@ -79322,12 +79322,14 @@ ENDSEC
 				let geoJSONIcon = `${Potree.resourcePath}/icons/file_geojson.svg`;
 				let dxfIcon = `${Potree.resourcePath}/icons/file_dxf.svg`;
 				let potreeIcon = `${Potree.resourcePath}/icons/file_potree.svg`;
+				let csvIcon = `${Potree.resourcePath}/icons/file_csv.svg`;
 
 				elExport.append(`
 				Export: <br>
 				<a href="#" download="measure.json"><img name="geojson_export_button" src="${geoJSONIcon}" class="button-icon" style="height: 24px" /></a>
 				<a href="#" download="measure.dxf"><img name="dxf_export_button" src="${dxfIcon}" class="button-icon" style="height: 24px" /></a>
 				<a href="#" download="potree.json5"><img name="potree_export_button" src="${potreeIcon}" class="button-icon" style="height: 24px" /></a>
+				<a href="#" download="cloud.pts"><img name="csv_export_button" src="${csvIcon}" class="button-icon" style="height: 24px" /></a>
 			`);
 
 				let elDownloadJSON = elExport.find("img[name=geojson_export_button]").parent();
@@ -79370,6 +79372,33 @@ ENDSEC
 
 					let url = window.URL.createObjectURL(new Blob([dataString], {type: 'data:application/octet-stream'}));
 					elDownloadPotree.attr('href', url);
+				});
+
+				let elDownloadCSV = elExport.find("img[name=csv_export_button]").parent();
+				elDownloadCSV.click( (event) => {
+
+					// change file name
+					let fileName = "test" + ".pts";
+					elDownloadCSV.attr('download', fileName);
+
+					// get data file content
+					let data = [[0.1,0.2,0.3,255,254,253],[0.1,0.2,0.3,255,254,253],[0.1,0.2,0.3,255,254,253]];
+
+					// set header
+					let dataString = "//X Y Z R G B c\n";
+
+					// format data to string
+					dataString += data.map((item) => {
+						// Here item refers to a row in that 2D array
+						var row = item;
+						// Now join the elements of row with " " using join function
+						return row.join(" ");
+					}).join("\n");
+
+					// set file content
+					let url = window.URL.createObjectURL(new Blob([dataString], {type: 'data:application/octet-stream'}));
+					elDownloadCSV.attr('href', url);
+
 				});
 			}
 
